@@ -1,0 +1,14 @@
+APIs
+
+auth routes:
+1. register user
+2. get user by id
+3. login user
+4. get user
+
+account routes:
+1. add account for an user
+2. get account details by account id
+3. get account details by auth token
+4. update account details by account id
+5. delete account by account id
