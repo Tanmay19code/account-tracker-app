@@ -9,6 +9,7 @@ const categorySchema = new Schema({
   description: {
     type: String,
   },
+
   createdAt: {
     type: Date,
     default: Date.now,
@@ -16,6 +17,10 @@ const categorySchema = new Schema({
   createdBy: {
     type: Schema.Types.ObjectId,
     ref: "user",
+  },
+  account: {
+    type: Schema.Types.ObjectId,
+    ref: "account",
   },
   colorCode: {
     type: String,

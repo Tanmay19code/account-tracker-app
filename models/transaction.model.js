@@ -4,7 +4,6 @@ const { Schema } = mongoose;
 const transactionSchema = new Schema({
   date: {
     type: Date,
-    required: true,
     default: Date.now,
   },
   note: {
@@ -33,7 +32,6 @@ const transactionSchema = new Schema({
   // type is enum of "credit" or "debit" or "transfer"
   type: {
     type: String,
-    enum: ["credit", "debit", "transfer"],
     required: true,
   },
 });
