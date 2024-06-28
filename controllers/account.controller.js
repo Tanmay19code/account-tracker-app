@@ -2,7 +2,6 @@ const User = require("../models/user.model");
 const Account = require("../models/account.model");
 const { Response } = require("../helper/helper");
 
-
 const createAccount = async (req, res) => {
   try {
     const userId = req.user;
@@ -156,4 +155,39 @@ const updateAccount = async (req, res) => {
   }
 };
 
-module.exports = { createAccount, getAllAccounts, getAccount, updateAccount };
+const deleteAccount = async (req, res) => {
+  const userId = req.user;
+  if (!userId) {
+    return res.status(400).send(Response(false, "Invalid user", null));
+  }
+
+  const accountId = req.params.id;
+  if (!accountId) {
+    return res.status(400).send(Response(false, "Invalid account", null));
+  }
+  try {
+    const account = await Account.findById(accountId);
+    if (!account) {
+      return res.status(400).send(Response(false, "Account not found", null));
+    }
+
+    if (account.createdBy.toString() !== userId.toString()) {
+      return res.status(400).send(Response(false, "Unauthorized Access", null));
+    }
+
+    await Account.findByIdAndDelete(accountId);
+
+    return res.status(200).send(Response(true, "Account deleted", account));
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send(Response(false, "Internal Server Error", null));
+  }
+};
+
+module.exports = {
+  createAccount,
+  getAllAccounts,
+  getAccount,
+  updateAccount,
+  deleteAccount,
+};

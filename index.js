@@ -17,6 +17,7 @@ app.use("/api/auth", require("./routes/auth.route"));
 app.use("/api/account", require("./routes/account.route"));
 app.use("/api/category", require("./routes/category.route"));
 app.use("/api/transaction", require("./routes/transaction.route"));
+app.use("/api/saving", require("./routes/saving.route"));
 
 
 

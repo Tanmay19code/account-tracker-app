@@ -6,6 +6,7 @@ const {
   getAllAccounts,
   getAccount,
   updateAccount,
+  deleteAccount
 } = require("../controllers/account.controller");
 
 //% Route - 1:  GET - /api/account/create
@@ -23,5 +24,10 @@ router.get("/getaccount/:id", fetchUser, getAccount);
 //% Route - 4:  PUT - /api/account/update/:id
 //% Description: Update details of a specific account
 router.put("/update/:id", fetchUser, updateAccount);
+
+//% Route - 5:  DELETE - /api/account/delete/:id
+//% Description: Delete a specific account
+router.delete("/delete/:id", fetchUser, deleteAccount);
+
 
 module.exports = router;

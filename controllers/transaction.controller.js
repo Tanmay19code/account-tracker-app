@@ -94,7 +94,7 @@ const getTransaction = async (req, res) => {
       return res.status(400).send(Response(false, "Invalid transaction", null));
     }
 
-    const transaction = await Transaction.findById(transactionId);
+    const transaction = await Transaction.findById(transactionId).populate("category");
 
     if (!transaction) {
       return res.status(400).send(Response(false, "Invalid transaction", null));
@@ -113,7 +113,7 @@ const getTransaction = async (req, res) => {
 };
 
 const updateTransaction = async (req, res) => {
-  const { date, note, category, amount, type } = req.body;
+  const { date, note, category, amount, type, strikethrough } = req.body;
   const createdBy = req.user;
 
   if (!createdBy) {
@@ -180,6 +180,7 @@ const updateTransaction = async (req, res) => {
     transaction.date = date || transaction.date;
     transaction.note = note || transaction.note;
     transaction.category = category || transaction.category;
+    transaction.strikethrough = strikethrough || transaction.strikethrough;
 
     await transaction.save();
     await account.save();
