@@ -1,5 +1,8 @@
 const User = require("../models/user.model");
 const Account = require("../models/account.model");
+const Transaction = require("../models/transaction.model");
+const Saving = require("../models/saving.model");
+const Category = require("../models/category.model");
 const { Response } = require("../helper/helper");
 
 const createAccount = async (req, res) => {
@@ -69,7 +72,9 @@ const getAllAccounts = async (req, res) => {
       return res.status(400).send(Response(false, "Accounts not found", null));
     }
 
-    return res.status(200).send(Response(true, "Accounts found", accounts));
+    return res
+      .status(200)
+      .send(Response(true, "Accounts found", accounts.accounts));
   } catch (error) {
     console.error(error);
     return res.status(500).send(Response(false, "Internal Server Error", null));
@@ -173,6 +178,28 @@ const deleteAccount = async (req, res) => {
 
     if (account.createdBy.toString() !== userId.toString()) {
       return res.status(400).send(Response(false, "Unauthorized Access", null));
+    }
+
+    const savings = account.savings;
+    const transactions = account.transactions;
+    const categories = account.categories;
+
+    if (savings.length > 0) {
+      for (let i = 0; i < savings.length; i++) {
+        await Saving.findByIdAndDelete(savings[i]);
+      }
+    }
+
+    if (transactions.length > 0) {
+      for (let i = 0; i < transactions.length; i++) {
+        await Transaction.findByIdAndDelete(transactions[i]);
+      }
+    }
+
+    if (categories.length > 0) {
+      for (let i = 0; i < categories.length; i++) {
+        await Category.findByIdAndDelete(categories[i]);
+      }
     }
 
     await Account.findByIdAndDelete(accountId);

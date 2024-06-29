@@ -240,9 +240,64 @@ const deleteTransaction = async (req, res) => {
   }
 };
 
+const getTransactionsInCategory = async (req, res) => { 
+  const { accountId, categoryId } = req.params;
+  const createdBy = req.user;
+
+  if (!createdBy) {
+    return res.status(400).send(Response(false, "Invalid user", null));
+  }
+
+  try {
+    if (!accountId) {
+      return res.status(400).send(Response(false, "Invalid account", null));
+    }
+
+    if (!categoryId) {
+      return res.status(400).send(Response(false, "Invalid category", null));
+    }
+
+    const account = await Account.findById(accountId);
+
+    if (!account) {
+      return res.status(400).send(Response(false, "Invalid account", null));
+    }
+
+    if(account.createdBy.toString() !== createdBy.toString()) {
+      return res.status(401).send(Response(false, "Unauthorized access", null));
+    }
+
+    if(!account.categories.includes(categoryId)) {
+      return res.status(400).send(Response(false, "Category not available", null));
+    }
+
+    const transactions = await Transaction.find({ account: accountId, category: categoryId });
+
+    let totalAmount = 0;
+
+
+    transactions.forEach(transaction => {
+      totalAmount += transaction.amount;
+    });
+
+    return res.status(200).send(Response(true, "Total amount in category", {
+      category: categoryId,
+      totalAmount,
+      noOfTransactions: transactions.length,
+      transactions
+    }));
+
+
+
+  } catch (err) {
+    return res.status(400).send(Response(false, err.message, null));
+  }
+}
+
 module.exports = {
   createTransaction,
   updateTransaction,
   getTransaction,
   deleteTransaction,
+  getTransactionsInCategory
 };
