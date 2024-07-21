@@ -9,7 +9,6 @@ const PORT = process.env.PORT || 5000;
 // Connect to MongoDB
 connectToMongo();
 
-
 app.use(morgan("dev"));
 app.use(express.json());
 
@@ -22,9 +21,8 @@ app.use("/api/transaction", require("./routes/transaction.route"));
 app.use("/api/saving", require("./routes/saving.route"));
 
 app.get("/*", (req, res) => {
-  res.sendFile(path.resolve('views', 'client', 'build', 'index.html'));
+  res.sendFile(path.resolve("views", "client", "build", "index.html"));
 });
- 
 
 app.listen(5000, () => {
   console.log(`Server is running on port ${PORT}`.yellow.italic.underline.bold);
