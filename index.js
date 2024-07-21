@@ -20,6 +20,10 @@ app.use("/api/category", require("./routes/category.route"));
 app.use("/api/transaction", require("./routes/transaction.route"));
 app.use("/api/saving", require("./routes/saving.route"));
 
+app.get("/test", (req, res) => {
+  res.send("Hello World");
+});
+
 app.get("/*", (req, res) => {
   res.sendFile(path.resolve("views", "client", "build", "index.html"));
 });
