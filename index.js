@@ -13,7 +13,13 @@ connectToMongo();
 app.use(morgan("dev"));
 app.use(express.json());
 
-app.use(express.static(path.join(__dirname, "client", "build")));
+// Path to the build directory
+const buildPath = path.join(__dirname, "views", "client", "build");
+
+// Serve static files from the React app build directory
+app.use(express.static(buildPath));
+
+console.log(`Static files served from: ${buildPath}`);
 
 app.use("/api/auth", require("./routes/auth.route"));
 app.use("/api/account", require("./routes/account.route"));
@@ -25,10 +31,13 @@ app.get("/test", (req, res) => {
   res.send("Hello World");
 });
 
+// Catch-all route to serve the React app
 app.get("/*", (req, res) => {
-  res.sendFile(path.resolve("views", "client", "build", "index.html"));
+  const resolvedPath = path.resolve(buildPath, "index.html");
+  console.log(`Serving file from: ${resolvedPath}`);
+  res.sendFile(resolvedPath);
 });
 
-app.listen(5000, () => {
+app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`.yellow.italic.underline.bold);
 });
