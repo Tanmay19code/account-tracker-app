@@ -3,6 +3,7 @@ const app = express();
 const morgan = require("morgan");
 const connectToMongo = require("./database/db");
 require("dotenv").config({ path: "./.env" });
+const path = require("path");
 
 const PORT = process.env.PORT || 5000;
 
